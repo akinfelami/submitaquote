@@ -1,0 +1,16 @@
+.button{
+    border:none ;
+  
+}
+
+.button:hover{
+    background-color:#ede7d9;
+    opacity: 1;
+    content:"";
+}
+
+.counts{
+    cursor: default !important;
+    background: none;
+    border: none;
+}
