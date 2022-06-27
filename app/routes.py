@@ -30,7 +30,6 @@ def index():
     return app.send_static_file('index.html')
 
 
-
 # --  Admin Panel --- #
 
 # Log out
