@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Card from '../components/Card';
+import PaginatedItems from '../components/Card';
 
 function QuotesToApprove() {
 	const [content, setContent] = useState([]);
@@ -10,8 +10,8 @@ function QuotesToApprove() {
 					'http://localhost:5000/api/admin/quotes'
 				);
 				const result = await response.json();
-				setContent(result);
-				console.log(result);
+				const content = result.map((item) => item).reverse();
+				setContent(content);
 			} catch (err) {
 				console.error(err);
 			}
@@ -20,7 +20,11 @@ function QuotesToApprove() {
 	}, []);
 	return (
 		<div>
-			<Card approve={'Approve'} cardContent={content} />
+			<PaginatedItems
+				approve={'Approve'}
+				cardContent={content}
+				itemsPerPage={5}
+			/>
 		</div>
 	);
 }

@@ -35,8 +35,6 @@ function Navbar(props) {
 							</Link>
 						</li>
 					</ul>
-
-					<div>{props.search}</div>
 				</div>
 			</div>
 		</nav>

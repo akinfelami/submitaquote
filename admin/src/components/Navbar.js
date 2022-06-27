@@ -28,7 +28,7 @@ function Navbar(props) {
 					<ul class='navbar-nav me-auto mb-2 mb-lg-0'>
 						<li class='nav-item'>
 							<Link
-								class='nav-link active me-5'
+								class='nav-link active'
 								aria-current='page'
 								to='/approvedquotes'>
 								<button
@@ -39,17 +39,28 @@ function Navbar(props) {
 							</Link>
 						</li>
 						<li class='nav-item'>
-							<a
-								class='nav-link active me-5'
+							<Link
+								class='nav-link active'
 								aria-current='page'
-								to='/approvedquotes'>
+								to='/declinedquotes'>
+								<button
+									type='button'
+									class='btn btn-secondary btn-sm'>
+									See DeclinedQuotes
+								</button>
+							</Link>
+						</li>
+						<li class='nav-item'>
+							<div
+								class='nav-link active me-5'
+								aria-current='page'>
 								<button
 									onClick={handleLogout}
 									type='button'
 									class='btn btn-secondary btn-sm'>
 									Log out
 								</button>
-							</a>
+							</div>
 						</li>
 					</ul>
 				</div>

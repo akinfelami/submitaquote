@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Card from '../components/Card';
+import PaginatedItems from '../components/Card';
 import Navbar from '../components/Navbar';
 
 function Home() {
@@ -11,39 +11,19 @@ function Home() {
 					'http://localhost:5000/api/quotes'
 				);
 				const result = await response.json();
-				setContent(result);
-				console.log(result);
+				const content = result.map((item) => item).reverse();
+				setContent(content);
 			} catch (err) {
 				console.error(err);
 			}
 		};
 		getData();
 	}, []);
-	const searchBar = (
-		<form role='search'>
-			<input class='form-control-sm' type='search' placeholder='Search' />
-		</form>
-	);
-
-	const [upvote, setUpvote] = useState(0);
-
-	const handleUpvote = () => {
-		setUpvote(upvote + 1);
-	};
-
-	const handleDownvote = () => {
-		setUpvote(upvote - 1);
-	};
 
 	return (
 		<>
-			<Navbar search={searchBar} />
-			<Card
-				up={handleUpvote}
-				down={handleDownvote}
-				votes={upvote}
-				cardContent={content}
-			/>
+			<Navbar />
+			<PaginatedItems cardContent={content} itemsPerPage={5} />
 		</>
 	);
 }

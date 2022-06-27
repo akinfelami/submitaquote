@@ -1,11 +1,11 @@
-from flask import redirect, request_tearing_down, session, request, url_for, render_template
+from flask import redirect,flash, session, request, url_for, render_template, send_from_directory
 from app import app
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from dotenv import load_dotenv
 import json
 from app import db
-from app.models import Quotes, QuotesToApprove, ApprovedQuotes
+from app.models import Quotes, QuotesToApprove, ApprovedQuotes, DeclinedQuotes
 load_dotenv()
 
 password = os.getenv('PASSWORD')
@@ -27,7 +27,36 @@ def internal_server_error(e):
 @app.route('/')
 def index():
     # return build page for users
-    return "Hello World"
+    return app.send_static_file('index.html')
+
+
+
+# --  Admin Panel --- #
+
+# Log out
+@app.route('/api/admin/logout', methods=['POST'])
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('admin'))
+
+# Log in Admin 
+@app.route('/api/admin', methods=['GET', 'POST'])
+# Check login credentials for admin
+def admin():
+    # Admin login page
+    if request.method == 'POST':
+        if request.form['username'] == 'admin' and check_password_hash(hashed_password, request.form['password']):
+            session['username'] = request.form['username']
+            # Actually return build folder for admin
+            return "Logged in"
+        return "You are not authorized to view this page"
+        
+    # if GET request the return admin login page
+    else:
+        if 'username' in session:
+            # return admin build page
+            return "Logged in"
+        return render_template('adminlogin.html', title='Admin')
 
 # --- db access and manipulation --- 
 
@@ -79,6 +108,22 @@ def admin_quotes_approved():
         })
     return json.dumps(q)
 
+# Get all Quotes already Declined
+@app.route('/api/admin/quotesdeclined')
+def admin_quotes_declined():
+
+    quotes = DeclinedQuotes.query.all()
+    q = []
+    for quote in quotes:
+        q.append({
+                "id": quote.id,
+                "name": quote.name,
+                'author': quote.author, 
+                'source': quote.source, 
+                'quote': quote.quote
+        })
+    return json.dumps(q)
+
 
 # Approve quote from admin
 @app.route('/api/admin/approve', methods=['POST'])
@@ -113,65 +158,73 @@ def approve_quote():
 
     db.session.commit()
 
-    return {"msg": "Success"}
+    return redirect(url_for('admin'))
 
-# Delete Quotes from Quotes db and ApprovedQuotes db
-@app.route('/api/admin/deletequote', methods=['POST'])
-def deletequote():
+# Decline Quotes 
+@app.route('/api/admin/declinequote', methods=['POST'])
+def declinequote():
+
     data = request.get_json()
-    to_delete = Quotes.query.filter_by(quote=data['quote']).first()
-    db.session.delete(to_delete)
-    to_delete_too = ApprovedQuotes.query.filter_by(quote=data['quote']).first() 
-    db.session.delete(to_delete_too)
-
-    db.session.commit()
-    
-    return {"msg": "Success"}
-
-
-
-# Receives requests to submit new quote
-@app.route('/api/newquote', methods=['POST'])
-def new():
-    data = request.get_json()
-    new_db_entry = QuotesToApprove(
+    new_db_entry = DeclinedQuotes(
         name = data['name'],
         author = data['author'], 
         source = data['source'],
         quote = data['quote']
     )
+
     db.session.add(new_db_entry)
+    
+    to_delete = QuotesToApprove.query.filter_by(quote=data['quote']).first()
+    db.session.delete(to_delete)
     db.session.commit()
 
-    return {'msg': 'Thank you, your quote has been received and is under revision!'}
-
-
-# --  Admin Panel --- #
-
-# Log out
-@app.route('/api/admin/logout', methods=['POST'])
-def logout():
-    session.pop('username', None)
+    
     return redirect(url_for('admin'))
 
-# Log in Admin 
-@app.route('/api/admin', methods=['GET', 'POST'])
-# Check login credentials for admin
-def admin():
-    # Admin login page
-    if request.method == 'POST':
-        if request.form['username'] == 'admin' and check_password_hash(hashed_password, request.form['password']):
-            session['username'] = request.form['username']
-            # Actually return build folder for admin
-            return "Logged in"
-        return "You are not authorized to view this page"
-        
-    # if GET request the return admin login page
-    else:
-        if 'username' in session:
-            # return admin build page
-            return "Logged in"
-        return render_template('adminlogin.html', title='Admin')
+# Delete Quotes from Quotes db and ApprovedQuotes db
+@app.route('/api/admin/deletequote', methods=['POST'])
+def deletequote():
+    data = request.get_json()
+    print(data)
+    to_delete = Quotes.query.filter_by(quote=data['quote']).first()
+    db.session.delete(to_delete)
+    db.session.commit()
+    to_delete_too = ApprovedQuotes.query.filter_by(quote=data['quote']).first() 
+    db.session.delete(to_delete_too)
+    db.session.commit()
+
+    
+    
+    return redirect(url_for('admin'))
+
+# Delete declined quote    
+@app.route('/api/admin/deletedeclined', methods=['POST'])
+def delete_declined_quote():
+    data = request.get_json()
+    to_delete = DeclinedQuotes.query.filter_by(quote=data['quote']).first()
+    db.session.delete(to_delete)
+    db.session.commit()
+
+    
+    
+    return redirect(url_for('admin'))
+
+
+# Receives requests to submit new quote
+@app.route('/api/newquote', methods=['POST'])
+def new():
+
+    new_db_entry = QuotesToApprove(
+        name = request.form['name'],
+        author = request.form['author'],
+        source = request.form['source'],
+        quote = request.form['quote']
+    )
+    db.session.add(new_db_entry)
+    db.session.commit()
+    return redirect(url_for('index')) 
+
+
 
 
 
