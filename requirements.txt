@@ -9,7 +9,7 @@ appnope @ file:///opt/concourse/worker/volumes/live/5f13e5b3-5355-4541-5fc3-f088
 appscript @ file:///opt/concourse/worker/volumes/live/82e8b4c7-2416-4d10-509e-144ca79d9b1d/volume/appscript_1611426996703/work
 argh==0.26.2
 argon2-cffi @ file:///opt/concourse/worker/volumes/live/d733ceb5-7f19-407b-7da7-a386540ab855/volume/argon2-cffi_1613037492998/work
-arrow==0.13.1
+arrow==0.15.1
 asn1crypto @ file:///tmp/build/80754af9/asn1crypto_1596577642040/work
 astroid @ file:///opt/concourse/worker/volumes/live/269b33aa-309a-4844-4a47-1ea5675bedfd/volume/astroid_1628063146562/work
 astropy @ file:///opt/concourse/worker/volumes/live/d8b26183-8e74-4368-7e73-a2ea553ba27c/volume/astropy_1638785511303/work
