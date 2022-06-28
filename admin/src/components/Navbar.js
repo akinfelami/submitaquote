@@ -4,7 +4,8 @@ import axios from 'axios';
 
 function Navbar(props) {
 	const handleLogout = async () => {
-		await axios.post('http://localhost:5000/api/admin/logout');
+		await axios.get('http://localhost:5000/api/admin/logout');
+		window.location.reload();
 	};
 	return (
 		<nav
@@ -12,7 +13,7 @@ function Navbar(props) {
 			aria-label='Ninth navbar example'>
 			<div class='container ms-auto p-1'>
 				<Link class='navbar-brand' to='/'>
-					SpiritualQuotes
+					Submit a Quote
 				</Link>
 				<button
 					class='navbar-toggler'
@@ -56,7 +57,7 @@ function Navbar(props) {
 								aria-current='page'>
 								<button
 									onClick={handleLogout}
-									type='button'
+									type='submit'
 									class='btn btn-secondary btn-sm'>
 									Log out
 								</button>

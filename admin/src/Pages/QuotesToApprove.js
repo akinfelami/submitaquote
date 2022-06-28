@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PaginatedItems from '../components/Card';
 
-function QuotesToApprove() {
+function QuotesToApprove(props) {
 	const [content, setContent] = useState([]);
 	useEffect(() => {
 		const getData = async () => {
@@ -19,13 +19,15 @@ function QuotesToApprove() {
 		getData();
 	}, []);
 	return (
-		<div>
-			<PaginatedItems
-				approve={'Approve'}
-				cardContent={content}
-				itemsPerPage={5}
-			/>
-		</div>
+		<>
+			<div>
+				<PaginatedItems
+					approve={'Approve'}
+					cardContent={content}
+					itemsPerPage={5}
+				/>
+			</div>
+		</>
 	);
 }
 

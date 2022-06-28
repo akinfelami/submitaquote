@@ -8,7 +8,7 @@ function Navbar(props) {
 			aria-label='Ninth navbar example'>
 			<div class='container ms-auto p-1'>
 				<Link class='navbar-brand' to='/'>
-					SpiritualQuotes
+					Submit a Quote
 				</Link>
 				<button
 					class='navbar-toggler'

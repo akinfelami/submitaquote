@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 import os
 
 
-app = Flask(__name__, static_folder='../user/build', static_url_path='/')
+app = Flask(__name__, static_folder='../admin/build', static_url_path='/')
 
 CORS(app)
 
