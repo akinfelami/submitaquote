@@ -6,7 +6,7 @@ Submitaquote lets users submit a quote for approval. They quotes can then be app
 
 -   Clone the repo
 -   `pip install -r requirements.txt`
--   Start server ``python server.py`
+-   Start server `python server.py`
 -   ```
      cd user
      npm install
@@ -18,4 +18,4 @@ Submitaquote lets users submit a quote for approval. They quotes can then be app
      npm start
     ```
 
-###### Note
+
