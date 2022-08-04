@@ -1,6 +1,4 @@
-from app import app, db
-from app.models import Quotes
-
+from project import app, db
 
 if __name__ == '__main__':
     app.run()
